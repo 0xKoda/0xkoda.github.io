@@ -3,90 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koda</title>
     <link rel="icon" type="image/svg+xml" href="cub.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>0xkoda - GitHub Profile</title>
+
     <style>
+        @font-face {
+            font-family: 'DepartureMono';
+            src: url('DepartureMono.woff') format('woff');
+        }
+
+        :root {
+            --amber: #ffa133;
+            --pumpkin: #e47b1a;
+            --flux: #c8be50;
+            --foam: #bccabb;
+            --enamel: #eeeeee;
+            --cement: #c0c0c0;
+            --aluminum: #cccccc;
+            --ash: #8e8e8e;
+            --mud: #8a8a6f;
+            --clay: #6c6c58;
+            --smoke: #666666;
+            --dark: #444444;
+            --soot: #333333;
+            --carbon: #222222;
+            --black: #141414;
+            --accent: var(--amber);
+            --fg: var(--dark);
+            --bg: var(--enamel);
+        }
+
         body {
-            font-family: 'Orbitron', sans-serif;
-            background-color: #000; 
-            color: #E0E0E0; 
-            background-size: cover;
+            font-family: 'DepartureMono', monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative; 
+            color: var(--cement);
         }
 
-        .text-container {
-            position: relative;
-            background-color: rgba(0, 0, 0, 0.5); 
-            padding: 4rem; 
-            color: rgba(224, 224, 224, 0.9); 
-            margin: auto; 
-            max-width: 800px; 
-            font-weight: bold; 
-        }
-
-        .text-container::before {
+        body::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: url('author.png'); 
+            background-image: url('g.png'); 
             background-size: cover;
-            filter: grayscale(100%); 
-            z-index: -1;
-            opacity: 0.2; 
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: invert(1);
+            z-index: -1; 
         }
 
-        .button-text {
-            background-color: rgba(192, 192, 192, 0.8); 
-            color: rgba(0, 0, 0, 0.8); 
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            transition: background-color 0.3s, color 0.3s; 
-        }
-
-        .button-text:hover, .footer-links a:hover {
-            background-color: #8B0000; 
-            color: rgba(255, 255, 255, 0.8); 
-        }
-
-        .footer-links {
+        .container {
+            background-color: rgba(20, 20, 20, 0.95);
+            padding: 2rem;
+            border-radius: 10px;
             text-align: center;
-            padding: 1rem;
-            font-size: 1.25rem;
-            position: fixed; 
-            width: 100%;
-            bottom: 0;
-            left: 0;
+            max-width: 800px;
         }
 
-        .text-container p {
-            margin-bottom: 1.5rem; 
+        h1 {
+            color: var(--amber);
+            font-size: 3rem;
+            margin-bottom: 2rem;
         }
 
-        @media (max-width: 768px) {
-            .footer-links {
-                position: fixed; 
-                width: 100%;
-                bottom: 0;
-            }
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
         }
+
+        .highlight {
+            background-color: var(--ash);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--cement);
+        }
+
+        .highlight:hover {
+            background-color: var(--amber);
+            color: var(--black);
+        }
+
+        nav {
+            margin-bottom: 2rem; 
+            text-align: center; 
+        }
+
+        nav a {
+            color: var(--black); 
+            background-color: var(--enamel); 
+            padding: 0.5rem 1rem; 
+            border-radius: 4px;
+            text-decoration: none; 
+            margin: 0 1rem; 
+            transition: background-color 0.3s ease; 
+        }
+
+        nav a:hover {
+            background-color: var(--amber); 
+        }
+
     </style>
 </head>
-<body class="flex items-center justify-center h-screen">
-    <div class="text-container text-center">
+<body>
+
+    <div class="container">
+        <h1>0xkoda</h1>
         <p>Hello! I'm Koda.</p>
-        <p>I hunt threat actors, and build tools to that end.</p>
-        <p><a href="https://t.me/chainchasers" class="button-text">Storm Watch</a> monitors withdrawals from Tornado Cash</p>
-        <p>Similarly, <a href="https://t.me/railgunwatch" class="button-text">Gun Watch</a> monitors withdrawals from Railgun.</p>
-        <p>For efficient hunting, <a href="https://0xkoda.github.io/retrace/" class="button-text">Retrace</a> collaborates withdrawals from both.</p>
-        <p>I monitor select frontends for signs of compromise with <a href="https://t.me/+lP4Tn49176FmMzBk" class="button-text">Site Sentry</a></p>
-        <p>Follow me on Twitter or Github to find out what I build next.</p>
+        <p>I hunt threat actors and build tools to that end.</p>
+        <p><a href="https://t.me/chainchasers" class="highlight">Storm Watch</a> monitors withdrawals from Tornado Cash</p>
+        <p>Similarly, <a href="https://t.me/railgunwatch" class="highlight">Gun Watch</a> monitors withdrawals from Railgun.</p>
+        <p>For efficient hunting, <a href="https://0xkoda.github.io/retrace/" class="highlight">Retrace</a> collaborates withdrawals from both.</p>
+        <p>I monitor select frontends for signs of compromise with <a href="https://t.me/+lP4Tn49176FmMzBk" class="highlight">Site Sentry</a></p>
+        <p>Follow me on <a href="https://x.com/0xkoda" class="highlight">X</a> or <a href="https://github.com/0xkoda" class="highlight">Github</a> to find out what I build next.</p>
     </div>
-    <div class="footer-links">
-        <a href="https://github.com/0xkoda">GitHub</a> | <a href="https://twitter.com/0xkoda">Twitter</a>
-    </div>
+
 </body>
 </html>
