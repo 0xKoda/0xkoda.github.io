@@ -44,17 +44,14 @@
             font-family: 'DepartureMono', monospace;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            position: relative;
             color: var(--cement);
+            background-color: var(--black);
         }
 
         body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
@@ -69,30 +66,30 @@
 
         .container {
             background-color: rgba(20, 20, 20, 0.95);
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 10px;
-            text-align: left;
             max-width: 800px;
-            margin: 2rem auto;
+            margin: 1rem auto;
+            box-sizing: border-box;
         }
 
         h1 {
             color: var(--amber);
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            margin-bottom: 1rem;
             text-align: center;
         }
 
         h2 {
             color: var(--pumpkin);
-            font-size: 1.8rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
         }
 
         p {
-            font-size: 1.1rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            line-height: 1.5;
             margin-bottom: 1rem;
         }
 
@@ -125,7 +122,7 @@
         }
 
         nav {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             text-align: center;
         }
 
@@ -135,12 +132,37 @@
             padding: 0.5rem 1rem;
             border-radius: 4px;
             text-decoration: none;
-            margin: 0 1rem;
+            margin: 0.5rem;
             transition: background-color 0.3s ease;
+            display: inline-block;
         }
 
         nav a:hover {
             background-color: var(--amber);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            h2 {
+                font-size: 1.25rem;
+            }
+
+            p, pre, code {
+                font-size: 0.9rem;
+            }
+
+            nav a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
