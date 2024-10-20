@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic DevSecOps in Web3 - 0xkoda Blog</title>
+    
+    <!-- Twitter Card meta tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@0xkoda">
+    <meta name="twitter:creator" content="@0xkoda">
+    <meta name="twitter:title" content="Basic DevSecOps in Web3 - Addressing Industry-Wide Amnesia">
+    <meta name="twitter:description" content="Are you a signer of a high value multisig? Learn how to enhance your project's security posture.">
+    <meta name="twitter:image" content="https://0xkoda.github.io/sc.png">
+
+    <style>
+        @font-face {
+            font-family: 'DepartureMono';
+            src: url('DepartureMono.woff') format('woff');
+        }
+
+        :root {
+            --amber: #ffa133;
+            --pumpkin: #e47b1a;
+            --flux: #c8be50;
+            --foam: #bccabb;
+            --enamel: #eeeeee;
+            --cement: #c0c0c0;
+            --aluminum: #cccccc;
+            --ash: #8e8e8e;
+            --mud: #8a8a6f;
+            --clay: #6c6c58;
+            --smoke: #666666;
+            --dark: #444444;
+            --soot: #333333;
+            --carbon: #222222;
+            --black: #141414;
+            --accent: var(--amber);
+            --fg: var(--dark);
+            --bg: var(--enamel);
+        }
+
+        body {
+            font-family: 'DepartureMono', monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            color: var(--cement);
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('g.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: invert(1);
+            z-index: -1;
+        }
+
+        .container {
+            background-color: rgba(20, 20, 20, 0.95);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: left;
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        h1 {
+            color: var(--amber);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        h2 {
+            color: var(--pumpkin);
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .highlight {
+            background-color: var(--ash);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--cement);
+        }
+
+        .highlight:hover {
+            background-color: var(--amber);
+            color: var(--black);
+        }
+
+        pre {
+            background-color: var(--soot);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+
+        code {
+            font-family: 'DepartureMono', monospace;
+            color: var(--flux);
+        }
+
+        nav {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        nav a {
+            color: var(--black);
+            background-color: var(--enamel);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: var(--amber);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Basic DevSecOps in Web3 - Addressing Industry-Wide Amnesia</h1>
+
+        <p>In the fast-paced world of Web3, security often takes a backseat to innovation. However, as the stakes grow higher, it's crucial to address the industry-wide amnesia surrounding basic DevSecOps practices. Below I will explore two fundamental security measures that every Web3 project should consider, especially those managing high-value multisigs.</p>
+
+        <h2>The Overlooked Threat: Endpoint Infections</h2>
+
+        <p>While displaying domain hashes for signers is a step in the right direction, it fails to address a more significant issue: compromised endpoints. If the device used for signing transactions is infected, all other security measures become moot. This is where proper DNS configuration comes into play.</p>
+
+        <h2>The Power of DNS in Security</h2>
+
+        <p>DNS can be a powerful tool in your security arsenal. By implementing strict DNS rules, you can block a substantial portion of potential threats. Many types of malware rely on communicating with command and control (C2) servers or downloading additional payloads. Properly configured DNS can prevent these connections, dramatically reducing your risk exposure. It's as simple as routing the traffic you expect, and blocking those you dont.</p>
+
+        <h2>Dedicated Signing Devices: A Worthwhile Investment</h2>
+
+        <p>For high-value multisigs (>$50 million), investing in dedicated signing devices for each signer is a no-brainer. These devices should be kept clean and used exclusively for signing transactions. This approach mitigates risks associated with malicious VS Code extensions, browser extensions, and npm packages that could compromise a development machine.</p>
+
+        <h2>Implementing a DNS Proxy with Whitelisting</h2>
+
+        <p>One effective approach is to set up a DNS proxy with whitelisting. Here's a simplified example:</p>
+
+        <pre><code>1. Install dnscrypt-proxy
+2. Create a whitelist (WL.txt) with trusted domains
+3. Edit the config to block all other domains (* in the blacklist)
+4. Restart with: sudo systemctl restart dnscrypt-proxy
+5. Set your device's DNS to 127.0.0.1 (local proxy) in your network settings</code></pre>
+
+        <p>We get it, many of us work remotely. For distributed teams looking for more convenience and efficiency, setting up a dedicated DNS server could be a viable option. Alternatively, less tech-savvy users might consider services like NextDNS for a user-friendly approach to DNS security.</p>
+
+        <h2>Avoiding Unnecessary Bloatware</h2>
+
+        <p>While many security solutions in the space offer browser extensions or additional software, these can often introduce unnecessary complexity and potential vulnerabilities. A properly configured DNS setup can provide robust protection without the need for additional bloatware.</p>
+
+        <h2>Conclusion</h2>
+
+        <p>As the Web3 space continues to evolve, it's crucial that we don't lose sight of fundamental security practices. These solutions might barely scratch the surface, but they are non-negotiable. By implementing strong DNS rules and using dedicated signing devices, and leveraging free monitoring service  we can significantly enhance the security posture of your web3 project. Remember, in crypto, security isn't just a best practice—it's a necessity.</p>
+
+    </div>
+</body>
+</html>
