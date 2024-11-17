@@ -171,31 +171,39 @@
 
         <h1>Basic DevSecOps in Web3 - Addressing Industry-Wide Amnesia</h1>
 
-        <p>In the fast-paced world of Web3, security often takes a backseat to innovation. However, as the stakes grow higher, it's crucial to address the industry-wide amnesia surrounding basic DevSecOps practices. Below I will explore two fundamental security measures that every Web3 project should consider, especially those managing high-value multisigs.</p>
+        <p>In the Web3 ecosystem, the race for innovation often overshadows security fundamentals. As TVL grows, we're witnessing a concerning pattern of overlooked DevSecOps practices. Many post incident reports reveal a stark reality: most compromises could have been prevented by implementing basic telemetry controls. Whether it's hijacked frontends or infected endpoints, the attack vectors consistently rely on unchecked network communication. Let's explore two critical security measures that Web3 projects, especially those managing high-value multisigs, need to implement.</p>
 
         <h2>The Overlooked Threat: Endpoint Infections</h2>
 
-        <p>While displaying domain hashes for signers is a step in the right direction, it fails to address a more significant issue: compromised endpoints. If the device used for signing transactions is infected, all other security measures become moot. This is where proper DNS configuration comes into play.</p>
+        <p>While displaying domain hashes for signers is a step in the right direction, it fails to address a more significant issue: compromised endpoints. If the device used for signing transactions is infected, (or, heaven forbid, the frontend) all other security measures become moot. Furthermore, for website owners, setting up DNS correctly is non-negotiable, as <a href="https://blogs.infoblox.com/threat-intelligence/dns-predators-hijack-domains-to-supply-their-attack-infrastructure/" >Sitting Duck attacks ramp up</a>. </p>
+
+        <h2>The Problem</h2>
+        <p>As end users, those interacting with frontends to facilitate web3 transactions, it can be difficult to discern between legitemate payloads or phishing attempts, especially if the domain is one we expect. In the same vain, end users cannot be expected to monitor any and all network telemetry when interacting with same. This is where proper DNS configuration comes into play. Many modern wallets integrate 'black-lists', these are domains that are 'known' to be malicious, but what of the domains we dont know? How do we make these interactions safe AND foolproof? The solution may be in tipping the problem on its head, steering away from blacklists, and implementing 'whitelists'.</p>
 
         <h2>The Power of DNS in Security</h2>
 
         <p>DNS can be a powerful tool in your security arsenal. By implementing strict DNS rules, you can block a substantial portion of potential threats. Many types of malware rely on communicating with command and control (C2) servers or downloading additional payloads. Properly configured DNS can prevent these connections, dramatically reducing your risk exposure. It's as simple as routing the traffic you expect, and blocking those you dont.</p>
-
-        <h2>Dedicated Signing Devices: A Worthwhile Investment</h2>
-
-        <p>For high-value multisigs (>$50 million), investing in dedicated signing devices for each signer is a no-brainer. These devices should be kept clean and used exclusively for signing transactions. This approach mitigates risks associated with malicious VS Code extensions, browser extensions, and npm packages that could compromise a development machine.</p>
-
+        
+        <p>The next evolution in smart wallet development should prioritize built-in whitelisting by default - securing users before they even know they need it.</p>
+        
         <h2>Implementing a DNS Proxy with Whitelisting</h2>
 
-        <p>One effective approach is to set up a DNS proxy with whitelisting. Here's a simplified example:</p>
+        <p>One effective approach is to set up a DNS proxy with whitelisting. Such a solution will continue to use your default upstream DNS resolver, but effectively 'filter' all traffic on your device. Here's a simplified example:</p>
 
         <pre><code>1. Install dnscrypt-proxy
-2. Create a whitelist (WL.txt) with trusted domains
-3. Edit the config to block all other domains (* in the blacklist)
+2. Create a whitelist (allowed-names.txt) with trusted domains
+3. Edit the config to block all other domains (*.* in the blacklist)
 4. Restart with: sudo systemctl restart dnscrypt-proxy
 5. Set your device's DNS to 127.0.0.1 (local proxy) in your network settings</code></pre>
 
+<p> I've provided an example of a ready made whitelist that works for Safe and Uniswap on Base <a href="https://github.com/0xKoda/defi-dns-whitelist/blob/main/allowed-names.txt">here.</a> </p>
+
         <p>We get it, many of us work remotely. For distributed teams looking for more convenience and efficiency, setting up a dedicated DNS server could be a viable option. Alternatively, less tech-savvy users might consider services like NextDNS for a user-friendly approach to DNS security.</p>
+
+        <h2>Dedicated Signing Devices: A Worthwhile Investment</h2>
+
+        <p>For high-value multisigs (>$50 million), investing in dedicated signing devices for each signer is a no-brainer. These devices should be kept clean and used exclusively for signing transactions. This approach mitigates risks associated with malicious VS Code extensions, browser extensions, and npm packages that could compromise a development machine. Pair this fresh device with a strict whitelist and you will mitigate the majority of threats facing users today. </p>
+
 
         <h2>Avoiding Unnecessary Bloatware</h2>
 
@@ -203,7 +211,7 @@
 
         <h2>Conclusion</h2>
 
-        <p>As the Web3 space continues to evolve, it's crucial that we don't lose sight of fundamental security practices. These solutions might barely scratch the surface, but they are non-negotiable. By implementing strong DNS rules and using dedicated signing devices, and leveraging free monitoring service  we can significantly enhance the security posture of your web3 project. Remember, in crypto, security isn't just a best practice—it's a necessity.</p>
+        <p>As the Web3 space continues to evolve, it's crucial that we don't lose sight of fundamental security practices. These solutions might barely scratch the surface, but they are non-negotiable. By implementing strong DNS rules and using dedicated signing devices, we can significantly enhance our security posture. Remember, in crypto, security isn't just a best practice—it's a necessity.</p>
 
     </div>
 </body>
