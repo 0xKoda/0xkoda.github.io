@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating Custom Providers for Eliza - 0xkoda Blog</title>
+    
+    <!-- Twitter Card meta tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@0xkoda">
+    <meta name="twitter:creator" content="@0xkoda">
+    <meta name="twitter:title" content="Creating Custom Providers for Eliza">
+    <meta name="twitter:description" content="Learn how to create and implement custom providers for Eliza, enhancing its capabilities with your own integrations.">
+    <meta name="twitter:image" content="https://0xkoda.github.io/author.png">
+
+    <style>
+        @font-face {
+            font-family: 'DepartureMono';
+            src: url('DepartureMono.woff') format('woff');
+        }
+
+        :root {
+            --amber: #ffa133;
+            --pumpkin: #e47b1a;
+            --flux: #c8be50;
+            --foam: #bccabb;
+            --enamel: #eeeeee;
+            --cement: #c0c0c0;
+            --aluminum: #cccccc;
+            --ash: #8e8e8e;
+            --mud: #8a8a6f;
+            --clay: #6c6c58;
+            --smoke: #666666;
+            --dark: #444444;
+            --soot: #333333;
+            --carbon: #222222;
+            --black: #141414;
+            --accent: var(--amber);
+            --fg: var(--dark);
+            --bg: var(--enamel);
+        }
+
+        body {
+            font-family: 'DepartureMono', monospace;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--cement);
+            background-color: var(--black);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('g.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: invert(1);
+            z-index: -1;
+        }
+
+        .container {
+            background-color: rgba(20, 20, 20, 0.95);
+            padding: 1.5rem;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 1rem auto;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--amber);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        h2 {
+            color: var(--pumpkin);
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        pre {
+            background-color: var(--carbon);
+            padding: 1rem;
+            overflow-x: auto;
+            border-radius: 4px;
+            margin: 1rem 0;
+            border: 1px solid var(--soot);
+        }
+
+        code {
+            font-family: 'DepartureMono', monospace;
+            color: var(--foam);
+        }
+
+        .note {
+            background-color: var(--soot);
+            border-left: 4px solid var(--amber);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        a {
+            color: var(--amber);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            color: var(--cement);
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            background-color: var(--ash);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--cement);
+        }
+
+        .highlight:hover {
+            background-color: var(--amber);
+            color: var(--black);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Creating Custom Providers for Eliza</h1>
+
+        <p>This guide will walk you through creating your own custom provider and action in Eliza. We'll build something practical: a news digest system that can fetch and summarize news from your favorite sources.</p>
+
+        <div class="note">
+            <strong>What you'll learn:</strong>
+            <ul>
+                <li>How to create a custom provider that fetches news from RSS feeds</li>
+                <li>How to build an action that processes user requests</li>
+                <li>Best practices for organizing your code</li>
+            </ul>
+        </div>
+
+        <h2>1. Setting Up Your Project</h2>
+        <p>First, let's create a new repository from the eliza-starter template:</p>
+        <ol>
+            <li>Go to <a href="https://github.com/ai16z/eliza-starter">https://github.com/ai16z/eliza-starter</a></li>
+            <li>Click the "Use this template" button</li>
+            <li>Create your new repository</li>
+            <li>Clone your new repository:</li>
+        </ol>
+        <pre><code>git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME
+cd YOUR_REPO_NAME
+pnpm install</code></pre>
+
+        <h2>2. Creating Your News Provider</h2>
+        <p>Let's create a provider that fetches news from your chosen RSS feeds. Make sure you replace the source URL's with your own.</p>
+
+        <pre><code>// src/providers/newsDigest.provider.ts
+import { Provider, IAgentRuntime, Memory, State } from "@ai16z/eliza";
+import Parser from 'rss-parser';
+import * as cheerio from 'cheerio';
+
+interface NewsItem {
+  title: string;
+  link: string;
+  pubDate: string;
+  content: string;
+  source: string;
+}
+
+// Add your favorite news sources here!
+const RSS_FEEDS = [
+  { title: "Your Tech News Source", url: "https://your-tech-news-source.com/feed" },
+  { title: "Another News Site", url: "https://another-news-site.com/rss" },
+  // Add more feeds as needed
+];
+
+const parser = new Parser();
+
+const newsDigestProvider: Provider = {
+  get: async (_runtime: IAgentRuntime, message: Memory, _state?: State): Promise<string> => {
+    try {
+      // Check if this is a news-related request
+      const text = message.content.text.toLowerCase().trim();
+      const hasNews = text.includes('news');
+      const hasSecurity = text.includes('security') || text.includes('cyber');
+      
+      if (!hasNews || !hasSecurity) {
+        return "";
+      }
+
+      // You can customize these keywords based on what you want to filter out
+      const unwantedKeywords = ['trending', 'price', 'stocks'];
+      if (unwantedKeywords.some(keyword => text.includes(keyword))) {
+        return "";
+      }
+      
+      const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
+      const allNews: NewsItem[] = [];
+
+      // Fetch from your RSS feeds
+      for (const feed of RSS_FEEDS) {
+        try {
+          const feedData = await parser.parseURL(feed.url);
+          const item = feedData.items[0];
+          
+          if (item) {
+            const pubDate = new Date(item.pubDate || '').getTime();
+            if (pubDate > last24Hours) {
+              // Get the full article
+              const response = await fetch(item.link || '');
+              const html = await response.text();
+              const $ = cheerio.load(html);
+              
+              // Customize this selector based on your news sources
+              const content = $('.article-content').text();
+
+              allNews.push({
+                title: item.title || '',
+                link: item.link || '',
+                pubDate: item.pubDate || '',
+                content: content.trim(),
+                source: feed.title
+              });
+            }
+          }
+        } catch (error) {
+          console.error(`Error fetching ${feed.title}:`, error);
+          // Continue with other feeds
+        }
+      }
+
+      // Get the latest stories
+      const topStories = allNews
+        .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+        .slice(0, 3);
+
+      // Format your digest however you like!
+      return topStories.map(story => `
+📰 ${story.title}
+Source: ${story.source}
+Published: ${new Date(story.pubDate).toLocaleString()}
+Summary: ${story.content.substring(0, 250)}...
+
+Read more: ${story.link}
+      `).join('\n\n');
+    } catch (error) {
+      console.error('Error in newsDigest provider:', error);
+      return 'Unable to fetch news stories right now. Please try again later.';
+    }
+  }
+};</code></pre>
+
+        <h2>3. Building Your Action</h2>
+        <p>Now let's create an action that handles user requests. You can customize the keywords and responses.</p>
+
+        <pre><code>// src/actions/newsDigest.action.ts
+import { Action, IAgentRuntime, Memory } from "@ai16z/eliza";
+import { newsDigestProvider } from "../providers/newsDigest.provider.js";
+
+export const newsDigestAction: Action = {
+  name: "NEWS_DIGEST",
+  // Add more variations of how users might ask for news
+  similes: ["NEWS_UPDATE", "LATEST_NEWS", "WHATS_NEW"],
+  description: "Fetch and summarize the latest news from your favorite sources",
+  examples: [
+    [
+      {
+        user: "{{user1}}",
+        content: { text: "What's happening in tech today?" }
+      },
+      {
+        user: "{{user2}}",
+        content: { text: "I'll fetch the latest tech news for you", action: "NEWS_DIGEST" }
+      }
+    ]
+  ],
+  
+  validate: async (_runtime: IAgentRuntime, message: Memory) => {
+    const text = message.content.text.toLowerCase().trim();
+    
+    // Customize these filters for your use case
+    const unwantedKeywords = ['weather', 'sports'];
+    if (unwantedKeywords.some(keyword => text.includes(keyword))) {
+      return false;
+    }
+    
+    // Add your own keyword combinations
+    const hasNews = text.includes('news') || text.includes('update');
+    const hasTopic = text.includes('tech') || text.includes('security');
+    
+    return hasNews && hasTopic;
+  },
+  
+  handler: async (runtime: IAgentRuntime, message: Memory) => {
+    try {
+      const news = await newsDigestProvider.get(runtime, message);
+      
+      await runtime.messageManager.createMemory({
+        ...message,
+        content: {
+          text: news,
+          action: "NEWS_DIGEST"
+        }
+      });
+      
+      return true;
+    } catch (error) {
+      console.error("Error in news digest action:", error);
+      return false;
+    }
+  }
+};</code></pre>
+
+        <h2>4. Bringing It All Together</h2>
+        <p>Finally, let's register your provider and action with your Eliza agent:</p>
+
+        <pre><code>// src/index.ts
+import { createAgent } from '@ai16z/eliza';
+import { newsDigestProvider } from './providers/newsDigest.provider';
+import { newsDigestAction } from './actions/newsDigest.action';
+
+const agent = createAgent({
+  providers: [
+    ['newsDigest', newsDigestProvider],
+    // Add your other providers here
+  ],
+  actions: [
+    newsDigestAction,
+    // Add your other actions here
+  ]
+});</code></pre>
+
+        <h2>5. Building and Running Your Agent</h2>
+        <p>Now that we have our provider and action registered, let's build and start our agent:</p>
+
+        <pre><code># Build the project
+pnpm run build src/index.ts
+
+# Start the agent with the Eliza character
+pnpm start --character="characters/eliza.character.json"</code></pre>
+
+        <h2>Making It Your Own</h2>
+        
+        <h3>Customization Points</h3>
+        <ul>
+            <li>RSS Feeds: Add your favorite news sources</li>
+            <li>Content Extraction: Adjust the HTML selectors for your feeds</li>
+            <li>Keywords: Customize what triggers your news digest</li>
+            <li>Response Format: Style your digest output</li>
+        </ul>
+
+        <h3>Pro Tips</h3>
+        <div class="note">
+            <ul>
+                <li>Start with 1-2 RSS feeds and expand as needed</li>
+                <li>Test your HTML selectors as news sites often update their layouts</li>
+                <li>Add error handling that makes sense for your use case</li>
+                <li>Keep your validation consistent between provider and action</li>
+                <li>New to creating Eliza agents? Check out this <a href="https://www.youtube.com/watch?v=6PZVwNTl5hI" target="_blank" class="highlight">helpful video tutorial</a> to get started!</li>
+
+            </ul>
+        </div>
+
+        <h2>Conclusion</h2>
+        <p>
+            Now you have your own custom news digest system! You can extend this further by:
+            <ul>
+                <li>Adding more news sources</li>
+                <li>Implementing category filtering</li>
+                <li>Creating custom digest formats</li>
+                <li>Adding sentiment analysis</li>
+            </ul>
+            The possibilities are endless - make it your own and have fun building!
+        </p>
+    </div>
+</body>
+</html>
