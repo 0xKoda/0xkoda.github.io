@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating Custom Providers for Eliza</title>
+    <style>
+        @font-face {
+            font-family: 'DepartureMono';
+            src: url('DepartureMono.woff') format('woff');
+        }
+
+        :root {
+            --amber: #ffa133;
+            --pumpkin: #e47b1a;
+            --flux: #c8be50;
+            --foam: #bccabb;
+            --enamel: #eeeeee;
+            --cement: #c0c0c0;
+            --aluminum: #cccccc;
+            --ash: #8e8e8e;
+            --mud: #8a8a6f;
+            --clay: #6c6c58;
+            --smoke: #666666;
+            --dark: #444444;
+            --soot: #333333;
+            --carbon: #222222;
+            --black: #141414;
+            --accent: var(--amber);
+            --fg: var(--dark);
+            --bg: var(--enamel);
+        }
+
+        body {
+            font-family: 'DepartureMono', monospace;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--cement);
+            background-color: var(--black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('g.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: invert(1);
+            z-index: -1;
+        }
+
+        .container {
+            background-color: rgba(20, 20, 20, 0.95);
+            padding: 3rem;
+            border-radius: 10px;
+            width: 1200px;
+            height: 630px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--amber);
+            font-size: 4rem;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Creating Custom Providers for Eliza</h1>
+    </div>
+</body>
+</html>

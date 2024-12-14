@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="cub.svg">
-    <title>0xkoda - GitHub Profile</title>
+    <title>0xkoda</title>
 
     <style>
         @font-face {
@@ -37,41 +37,51 @@
             font-family: 'DepartureMono', monospace;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            position: relative; 
             color: var(--cement);
+            background-color: var(--black);
+            position: relative;
         }
 
         body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: url('g.png'); 
+            background-image: url('g.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             filter: invert(1);
-            z-index: -1; 
+            z-index: -1;
         }
 
         .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section {
             background-color: rgba(20, 20, 20, 0.95);
             padding: 2rem;
             border-radius: 10px;
-            text-align: center;
-            max-width: 800px;
+            margin-bottom: 2rem;
         }
 
         h1 {
             color: var(--amber);
             font-size: 3rem;
-            margin-bottom: 2rem;
+            margin: 0 0 1rem 0;
+            text-align: center;
+        }
+
+        h2 {
+            color: var(--pumpkin);
+            font-size: 1.8rem;
+            margin: 0 0 1rem 0;
         }
 
         p {
@@ -95,39 +105,136 @@
             color: var(--black);
         }
 
-        nav {
-            margin-bottom: 2rem; 
-            text-align: center; 
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
         }
 
-        nav a {
-            color: var(--black); 
-            background-color: var(--enamel); 
-            padding: 0.5rem 1rem; 
-            border-radius: 4px;
-            text-decoration: none; 
-            margin: 0 1rem; 
-            transition: background-color 0.3s ease; 
+        .tool-card {
+            background-color: rgba(34, 34, 34, 0.6);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--soot);
+            transition: transform 0.2s ease;
         }
 
-        nav a:hover {
-            background-color: var(--amber); 
+        .tool-card:hover {
+            transform: translateY(-2px);
         }
 
+        .blog-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .blog-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(34, 34, 34, 0.6);
+            border-radius: 8px;
+            border: 1px solid var(--soot);
+            transition: transform 0.2s ease;
+        }
+
+        .blog-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .blog-title {
+            color: var(--amber);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-date {
+            color: var(--ash);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem auto;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>0xkoda</h1>
-        <p>Hello! I'm Koda.</p>
-        <p>I hunt threat actors and build tools to that end.</p>
-        <p><a href="https://t.me/chainchasers" class="highlight">Storm Watch</a> monitors withdrawals from Tornado Cash</p>
-        <p>Similarly, <a href="https://t.me/railgunwatch" class="highlight">Gun Watch</a> monitors withdrawals from Railgun.</p>
-        <p>For efficient hunting, <a href="https://0xkoda.github.io/retrace/" class="highlight">Retrace</a> collaborates withdrawals from both.</p>
-        <p>I monitor select frontends for signs of compromise with <a href="https://t.me/+lP4Tn49176FmMzBk" class="highlight">Site Sentry</a></p>
-        <p>Follow me on <a href="https://x.com/0xkoda" class="highlight">X</a> or <a href="https://github.com/0xkoda" class="highlight">Github</a> to find out what I build next.</p>
-    </div>
+        <div class="section">
+            <h1>0xkoda</h1>
+            <p>Building tools for AI, Blockchain & Cybersecurity.</p>
+            <div class="social-links">
+                <a href="https://x.com/0xkoda" class="highlight">X</a>
+                <a href="https://github.com/0xkoda" class="highlight">Github</a>
+            </div>
+        </div>
 
+        <div class="section">
+            <h2>Tools</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>Storm Watch</h3>
+                    <p>Real-time monitoring of Tornado Cash withdrawals</p>
+                    <a href="https://t.me/chainchasers" class="highlight">Join Channel</a>
+                </div>
+                <div class="tool-card">
+                    <h3>Gun Watch</h3>
+                    <p>Monitoring Railgun withdrawals for suspicious activity</p>
+                    <a href="https://t.me/railgunwatch" class="highlight">Join Channel</a>
+                </div>
+                <div class="tool-card">
+                    <h3>Retrace</h3>
+                    <p>Collaborative withdrawal analysis from multiple sources</p>
+                    <a href="https://0xkoda.github.io/retrace/" class="highlight">Learn More</a>
+                </div>
+                <div class="tool-card">
+                    <h3>Site Sentry</h3>
+                    <p>Frontend compromise detection and monitoring</p>
+                    <a href="https://t.me/+lP4Tn49176FmMzBk" class="highlight">Join Channel</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Blog</h2>
+            <ul class="blog-list">
+                <li class="blog-item">
+                    <a href="/blog/eliza-custom-providers.html" class="blog-title">Creating Custom Providers for Eliza</a>
+                    <p>A guide to extending Eliza's capabilities with custom providers and actions</p>
+                    <div class="blog-date">December 13, 2023</div>
+                </li>
+                <li class="blog-item">
+                    <a href="/blog/DevSecOps-in-Web3.html" class="blog-title">Basic DevSecOps in Web3</a>
+                    <p>Addressing Industry-Wide Amnesia - Security practices for high-value multisig signers</p>
+                    <div class="blog-date">December 12, 2023</div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>
