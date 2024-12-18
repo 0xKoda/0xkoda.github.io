@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Farcaster Agent with Cloudflare Workers - 0xkoda Blog</title>
+    
+    <!-- Twitter Card meta tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@0xkoda">
+    <meta name="twitter:creator" content="@0xkoda">
+    <meta name="twitter:title" content="Building a Farcaster Agent with Cloudflare Workers">
+    <meta name="twitter:description" content="Learn how to create a powerful Farcaster agent using Cloudflare Workers with memory and extensible actions.">
+    <meta name="twitter:image" content="https://0xkoda.github.io/author.png">
+
+    <style>
+        @font-face {
+            font-family: 'DepartureMono';
+            src: url('../DepartureMono.woff') format('woff');
+        }
+
+        :root {
+            --amber: #ffa133;
+            --pumpkin: #e47b1a;
+            --flux: #c8be50;
+            --foam: #bccabb;
+            --enamel: #eeeeee;
+            --cement: #c0c0c0;
+            --aluminum: #cccccc;
+            --ash: #8e8e8e;
+            --mud: #8a8a6f;
+            --clay: #6c6c58;
+            --smoke: #666666;
+            --dark: #444444;
+            --soot: #333333;
+            --carbon: #222222;
+            --black: #141414;
+            --accent: var(--amber);
+            --fg: var(--dark);
+            --bg: var(--enamel);
+        }
+
+        body {
+            font-family: 'DepartureMono', monospace;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--cement);
+            background-color: var(--black);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('../g.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: invert(1);
+            z-index: -1;
+        }
+
+        .container {
+            background-color: rgba(20, 20, 20, 0.95);
+            padding: 1.5rem;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 1rem auto;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: var(--amber);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        h2 {
+            color: var(--pumpkin);
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        pre {
+            background-color: var(--carbon);
+            padding: 1rem;
+            overflow-x: auto;
+            border-radius: 4px;
+            margin: 1rem 0;
+            border: 1px solid var(--soot);
+        }
+
+        code {
+            font-family: 'DepartureMono', monospace;
+            color: var(--foam);
+        }
+
+        .note {
+            background-color: var(--soot);
+            border-left: 4px solid var(--amber);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        a {
+            color: var(--amber);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            color: var(--cement);
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            background-color: var(--ash);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--cement);
+        }
+
+        .highlight:hover {
+            background-color: var(--amber);
+            color: var(--black);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Building a Farcaster Agent with Cloudflare Workers</h1>
+
+        <p>Today, I'll show you how to build a powerful Farcaster agent using Cloudflare Workers. This agent comes with built-in memory capabilities and an extensible action system. I initially tried creating a Farcaster account manually, but trust me - use Neynar's API. It'll save you hours of headache!</p>
+
+        <div class="note">
+            <strong>What you'll learn:</strong>
+            <ul>
+                <li>Setting up a Farcaster account with Neynar</li>
+                <li>Creating a Cloudflare Worker for your agent</li>
+                <li>Implementing memory and character customization</li>
+                <li>Deploying your agent and setting up webhooks</li>
+            </ul>
+        </div>
+
+        <h2>1. Creating Your Farcaster Account</h2>
+        <p>First, you'll need a Farcaster account for your agent. Neynar provides an easy API for this - head over to <a href="https://docs.neynar.com/docs/how-to-create-a-new-farcaster-account-with-neynar" target="_blank" class="highlight">their documentation</a> for the full setup process. You'll get an FID (Farcaster ID) and API keys that we'll need later.</p>
+
+        <h2>2. Setting Up Your Worker</h2>
+        <p>Let's create a new Cloudflare Worker project:</p>
+        <pre><code>npm create cloudflare@latest my-farcaster-agent
+cd my-farcaster-agent</code></pre>
+
+        <p>Now, grab the agent code from our <a href="https://github.com/0xkoda/agent" target="_blank" class="highlight">template repository</a>. Copy the contents of the `ragent/src` directory into your worker's `src` directory.</p>
+
+        <h2>3. Configuration</h2>
+        <p>Create a `wrangler.toml` file in your project root:</p>
+        <pre><code>name = "farcaster-agent"
+main = "src/index.js"
+compatibility_date = "2023-01-01"
+node_compat = true
+
+[vars]
+FARCASTER_FID = "your_fid"
+FARCASTER_NEYNAR_SIGNER_UUID = "your_signer_uuid"
+FARCASTER_NEYNAR_API_KEY = "your_neynar_key"
+OPENROUTER_API_KEY = "your_openrouter_key"</code></pre>
+
+        <h2>4. Memory System</h2>
+        <p>Our agent uses a two-tier memory system:</p>
+        <ul>
+            <li>Conversation Memory: Keeps track of recent interactions (24-hour TTL)</li>
+            <li>Long-term Memory: Stores important information (30-day TTL)</li>
+        </ul>
+        <p>The memory system automatically maintains context across conversations, making your agent feel more natural and consistent.</p>
+
+        <h2>5. Character Customization</h2>
+        <p>Customize your agent's personality in `src/config/character.json`. You can define:</p>
+        <ul>
+            <li>Bio and personality traits</li>
+            <li>Knowledge areas and expertise</li>
+            <li>Response style and tone</li>
+            <li>Example conversations</li>
+        </ul>
+
+        <h2>6. Deployment and Webhooks</h2>
+        <p>Deploy your worker:</p>
+        <pre><code>npx wrangler deploy</code></pre>
+
+        <p>Set up your webhook in the Neynar dashboard:</p>
+        <ol>
+            <li>Go to the webhooks tab</li>
+            <li>Create a new webhook</li>
+            <li>Enter your worker URL as the target</li>
+            <li>Add your bot's FID to both mentioned_fids and parent_author_fids</li>
+        </ol>
+        <p>For detailed webhook setup instructions, check out the <a href="https://docs.neynar.com/docs/listen-for-bot-mentions" target="_blank" class="highlight">Neynar webhook documentation</a>.</p>
+
+        <h2>Extensibility</h2>
+        <p>The agent comes with a trending action that monitors Clanker for trending tokens. You can extend its capabilities by creating custom actions - we'll cover that in a future post!</p>
+
+        <div class="note">
+            <strong>Pro Tips:</strong>
+            <ul>
+                <li>Always use environment variables for sensitive keys</li>
+                <li>Test your agent locally with `wrangler dev` before deploying</li>
+                <li>Monitor your worker's logs for debugging</li>
+                <li>Start with simple actions and gradually add complexity</li>
+            </ul>
+        </div>
+
+        <h2>Conclusion</h2>
+        <p>
+            You now have a powerful Farcaster agent running on Cloudflare Workers! The built-in memory system and extensible action framework make it easy to create sophisticated interactions. Stay tuned for our next post on creating custom actions for your agent.
+        </p>
+    </div>
+</body>
+</html>
